@@ -15,7 +15,7 @@ namespace IDistributedCacheRedisApp.Web.Controllers
             _distributedCache = distributedCache;
         }
 
-        public async Task<IActionResult> Index()
+        public  IActionResult Index()
         {
             DistributedCacheEntryOptions cacheEntryOptions = new DistributedCacheEntryOptions();
 
@@ -49,6 +49,25 @@ namespace IDistributedCacheRedisApp.Web.Controllers
         public IActionResult Remove()
         {
             _distributedCache.Remove("name");
+
+            return View();
+        }
+
+        public IActionResult ImageUrl()
+        {
+            byte[] resimbyte = _distributedCache.Get("resim");
+
+            return File(resimbyte, "image/jpg");
+        }
+
+
+        public IActionResult ImageCache()
+        {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/download.jpg");
+
+            byte[] imageByte = System.IO.File.ReadAllBytes(path);
+
+            _distributedCache.Set("resim", imageByte);
 
             return View();
         }
